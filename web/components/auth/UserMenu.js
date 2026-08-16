@@ -1,3 +1,4 @@
+import config from "@/config"
 import Link from "next/link"
 import { signOut } from "@/lib/auth/actions"
 
@@ -33,7 +34,7 @@ export default function UserMenu({ user }) {
       >
         <li className="menu-title truncate">{user.email}</li>
         <li>
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/dashboard">{config.dashboard.alumnos.navLabel}</Link>
         </li>
         <li>
           <form action={signOut}>

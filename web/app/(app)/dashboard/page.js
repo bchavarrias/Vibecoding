@@ -1,128 +1,86 @@
-import { Check, RotateCcw, Trash2 } from "lucide-react"
+import config from "@/config"
 import { createClient } from "@/lib/supabase/server"
-import { createItem, toggleItem, deleteItem } from "./actions"
+import { createAlumno } from "./actions"
+import AlumnoList from "./AlumnoList"
 
-export const metadata = { title: "Dashboard" }
+const labels = config.dashboard.alumnos
+
+export const metadata = { title: labels.pageTitle }
 
 export default async function DashboardPage() {
   const supabase = await createClient()
-  const { data: items, error } = await supabase
+  const { data: alumnos, error } = await supabase
     .from("core_items")
-    .select("*")
+    .select("id, nombre, telefono, correo, created_at")
     .order("created_at", { ascending: false })
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Tu dashboard</h1>
-        <p className="mt-1 text-sm text-base-content/70">
-          CRUD genérico sobre <code>core_items</code>. En Sem 2 lo renombras a
-          tu dominio (leads, recetas, proyectos…).
-        </p>
+        <h1 className="text-2xl font-bold tracking-tight">{labels.pageTitle}</h1>
+        <p className="mt-1 text-sm text-base-content/70">{labels.subtitle}</p>
       </div>
 
-      {/* Crear */}
       <form
-        action={createItem}
+        action={createAlumno}
         className="rounded-box border border-base-200 bg-base-100 p-4"
       >
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <input
-            name="title"
-            required
-            maxLength={120}
-            placeholder="Título del item"
-            aria-label="Título del item"
-            className="input input-bordered flex-1"
-          />
-          <input
-            name="description"
-            maxLength={280}
-            placeholder="Descripción (opcional)"
-            aria-label="Descripción del item"
-            className="input input-bordered flex-1"
-          />
-          <button type="submit" className="btn btn-primary">
-            Agregar
-          </button>
+        <h2 className="mb-4 text-sm font-semibold">{labels.form.title}</h2>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <label className="form-control sm:col-span-2 lg:col-span-1">
+            <span className="label-text mb-1">{labels.form.nombre.label}</span>
+            <input
+              name="nombre"
+              required
+              maxLength={120}
+              placeholder={labels.form.nombre.placeholder}
+              aria-label={labels.form.nombre.label}
+              className="input input-bordered"
+            />
+          </label>
+          <label className="form-control">
+            <span className="label-text mb-1">{labels.form.telefono.label}</span>
+            <input
+              name="telefono"
+              required
+              maxLength={20}
+              placeholder={labels.form.telefono.placeholder}
+              aria-label={labels.form.telefono.label}
+              className="input input-bordered"
+            />
+          </label>
+          <label className="form-control">
+            <span className="label-text mb-1">{labels.form.correo.label}</span>
+            <input
+              name="correo"
+              type="email"
+              required
+              maxLength={120}
+              placeholder={labels.form.correo.placeholder}
+              aria-label={labels.form.correo.label}
+              className="input input-bordered"
+            />
+          </label>
+          <div className="flex items-end sm:col-span-2 lg:col-span-1">
+            <button type="submit" className="btn btn-primary w-full">
+              {labels.form.submit}
+            </button>
+          </div>
         </div>
       </form>
 
       {error && (
         <div className="rounded-lg border border-error/40 bg-error/10 px-4 py-3 text-sm text-error">
-          No pudimos cargar tus items: {error.message}
+          {labels.list.error}: {error.message}
         </div>
       )}
 
-      {/* Lista */}
-      {!items?.length ? (
-        <div className="rounded-box border border-dashed border-base-300 bg-base-100 px-4 py-12 text-center text-base-content/60">
-          Aún no tienes items. Crea el primero arriba.
-        </div>
-      ) : (
-        <ul className="space-y-2">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              className="flex items-center gap-3 rounded-box border border-base-200 bg-base-100 px-4 py-3"
-            >
-              <div className="min-w-0 flex-1">
-                <p
-                  className={
-                    item.status === "done"
-                      ? "truncate font-medium text-base-content/40 line-through"
-                      : "truncate font-medium"
-                  }
-                >
-                  {item.title}
-                </p>
-                {item.description && (
-                  <p className="truncate text-sm text-base-content/60">
-                    {item.description}
-                  </p>
-                )}
-              </div>
-
-              <span
-                className={`badge badge-sm ${
-                  item.status === "done" ? "badge-success" : "badge-ghost"
-                }`}
-              >
-                {item.status}
-              </span>
-
-              <form action={toggleItem}>
-                <input type="hidden" name="id" value={item.id} />
-                <input type="hidden" name="status" value={item.status} />
-                <button
-                  type="submit"
-                  className="btn btn-ghost btn-sm btn-square"
-                  title={item.status === "done" ? "Reabrir" : "Marcar como hecho"}
-                  aria-label={item.status === "done" ? "Reabrir item" : "Marcar como hecho"}
-                >
-                  {item.status === "done" ? (
-                    <RotateCcw className="size-4" />
-                  ) : (
-                    <Check className="size-4" />
-                  )}
-                </button>
-              </form>
-
-              <form action={deleteItem}>
-                <input type="hidden" name="id" value={item.id} />
-                <button
-                  type="submit"
-                  className="btn btn-ghost btn-sm btn-square text-error"
-                  title="Borrar"
-                  aria-label={`Borrar ${item.title}`}
-                >
-                  <Trash2 className="size-4" />
-                </button>
-              </form>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div>
+        <h2 className="mb-3 text-sm font-semibold text-base-content/80">
+          {labels.list.title}
+        </h2>
+        <AlumnoList alumnos={alumnos ?? []} labels={labels.list} />
+      </div>
     </div>
   )
 }

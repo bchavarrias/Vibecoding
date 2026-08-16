@@ -22,10 +22,10 @@ const config = {
   // Identidad del producto
   // -----------------------------------------------------------
   app: {
-    name: "Vibecoding",
+    name: "EntregaAlert",
     description:
-      "Plantilla del curso Vibe Code con Change and Code. Publica tu landing y usa la IA para construir tu negocio.",
-    domain: "vibecoding.dev", // sin https://, sin www
+      "Registra tus cursos de Moodle y recibe avisos antes de cada entrega para que nunca se te pase una tarea.",
+    domain: "entregalert.com", // sin https://, sin www
     locale: "es", // "es" | "en"
     // URL pública: usa NEXT_PUBLIC_APP_URL en .env. En este config solo definimos el default.
     defaultUrl: "http://localhost:3000",
@@ -36,9 +36,9 @@ const config = {
   // -----------------------------------------------------------
   brand: {
     // Color primario en HEX. DaisyUI lo aplica como --color-primary via theme.
-    primary: "#0ea5e9", // sky-500 (azul cielo)
+    primary: "#6366F1", // indigo — confianza + energía universitaria
     // Logo: puede ser texto o ruta a /public/logo.svg
-    logoText: "Vibecoding",
+    logoText: "Vibecoding - El futuro de la IA",
     logoSrc: null,
     // Estilo del bordeado global (DaisyUI usa esto para botones, cards)
     radius: "1rem",
@@ -103,6 +103,39 @@ const config = {
   },
 
   // -----------------------------------------------------------
+  // Dashboard — registro de alumnos (core_items)
+  // -----------------------------------------------------------
+  dashboard: {
+    alumnos: {
+      navLabel: "Alumnos",
+      pageTitle: "Mis alumnos",
+      subtitle:
+        "Registra y actualiza los datos de contacto de cada alumno para enviarle avisos de tareas en Moodle.",
+      form: {
+        title: "Registrar alumno",
+        nombre: { label: "Nombre del alumno", placeholder: "Ej. Ana García López" },
+        telefono: { label: "Teléfono", placeholder: "Ej. 6141234567" },
+        correo: { label: "Correo", placeholder: "Ej. ana@uni.edu.mx" },
+        submit: "Registrar alumno",
+      },
+      list: {
+        title: "Alumnos registrados",
+        empty: "Aún no hay alumnos registrados. Agrega el primero con el formulario de arriba.",
+        error: "No pudimos cargar los alumnos",
+        columns: {
+          nombre: "Nombre del alumno",
+          telefono: "Teléfono",
+          correo: "Correo",
+        },
+        edit: "Editar",
+        save: "Guardar cambios",
+        cancel: "Cancelar",
+        delete: "Eliminar",
+      },
+    },
+  },
+
+  // -----------------------------------------------------------
   // Landing — todo el copy de la página pública
   // -----------------------------------------------------------
   landing: {
@@ -113,11 +146,11 @@ const config = {
       { label: "Docs", href: "/docs" },
     ],
     hero: {
-      eyebrow: "Curso Vibe Code · Change and Code",
-      title: "Publica tu landing y ponle IA a tu negocio.",
+      eyebrow: "Para estudiantes universitarios",
+      title: "Nunca más olvides una entrega de Moodle ni una tarea pendiente",
       subtitle:
-        "Esta plantilla es tu punto de partida en el curso: página lista para publicar, captura de leads y IA integrada. Tú la haces tuya describiendo lo que quieres — la IA escribe el código.",
-      cta: { label: "Apúntate a la lista", href: "#waitlist" },
+        "Conecta tus cursos y recibe recordatorios automáticos días antes de cada fecha límite.",
+      cta: { label: "Regístrate gratis", href: "#waitlist" },
       ctaSecondary: { label: "Ver docs", href: "/docs" },
     },
     problem: {
@@ -149,34 +182,19 @@ const config = {
       subtitle: "Tú te enfocas en tu negocio; la plantilla pone la parte técnica.",
       items: [
         {
-          icon: "Rocket",
-          title: "Landing lista para publicar",
-          body: "Edita config.js con los textos de tu negocio y tienes página propia con URL pública.",
+          icon: "BellRing",
+          title: "Avisos antes de cada entrega",
+          body: "Te notificamos con días de anticipación para que organices tu tiempo sin estrés de último minuto.",
         },
         {
-          icon: "Users",
-          title: "Leads sin hojas de cálculo",
-          body: "Formulario de registro + panel /admin para ver a cada interesado, con fecha y fuente.",
-        },
-        {
-          icon: "Database",
-          title: "Base de datos + login",
-          body: "Supabase con tablas pre-modeladas, seguridad RLS y entrada con Google. Sin diseñar nada desde cero.",
+          icon: "GraduationCap",
+          title: "Conecta tus cursos de Moodle",
+          body: "Registra tus materias una vez y centraliza todas las fechas límite en un solo lugar.",
         },
         {
           icon: "Mail",
-          title: "Emails automáticos",
-          body: "Resend manda la bienvenida y los avisos de tu negocio por ti.",
-        },
-        {
-          icon: "Sparkles",
-          title: "IA integrada",
-          body: "Chat con tus datos, tool use y structured outputs listos para activar cuando los necesites.",
-        },
-        {
-          icon: "Bot",
-          title: "Agentes (opcional)",
-          body: "Si tu negocio tiene tareas de varios pasos, trae agentes LangGraph para que la IA trabaje sola.",
+          title: "Recordatorios directo a tu bandeja",
+          body: "Recibe correos claros con el nombre de la tarea, la materia y cuánto falta para entregar.",
         },
       ],
     },
@@ -185,20 +203,20 @@ const config = {
       title: "Lo que todos preguntan antes de arrancar.",
       items: [
         {
-          q: "¿Necesito saber programar?",
-          a: "No. El curso asume emprendedores no técnicos. Construyes describiéndole a la IA lo que quieres; la plantilla hace el resto.",
+          q: "¿Funciona con el Moodle de mi universidad?",
+          a: "Sí, si tu escuela usa Moodle estándar. Solo necesitas tu cuenta de alumno para sincronizar tus cursos.",
         },
         {
-          q: "¿Cuánto cuesta correr esto?",
-          a: "Vercel y Supabase tienen planes gratuitos generosos. OpenAI cobra por uso: con gpt-4o-mini, el costo de un MVP del curso ronda US$5-20.",
+          q: "¿Tengo que compartir mi contraseña de Moodle?",
+          a: "No guardamos tu contraseña. Solo leemos las fechas de entrega de los cursos que tú autorizas.",
         },
         {
-          q: "¿Puedo cambiar el stack?",
-          a: "Sí, pero las docs asumen este stack. Cambiar pieza por pieza es posible cuando termines el curso.",
+          q: "¿Cuánto cuesta usar EntregaAlert?",
+          a: "Puedes registrarte gratis y recibir avisos básicos por correo. Los planes de pago desbloquean más materias y recordatorios personalizados.",
         },
         {
-          q: "¿Y si me atoro?",
-          a: "Las docs incluyen una sección de troubleshooting con los 20 errores más comunes. Además tienes las sesiones del curso para preguntar.",
+          q: "¿Con cuánta anticipación me avisan?",
+          a: "Por defecto te escribimos 3 y 1 día antes de cada entrega, y puedes ajustar los plazos desde tu panel.",
         },
       ],
     },
