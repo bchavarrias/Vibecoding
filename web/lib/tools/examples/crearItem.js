@@ -8,13 +8,13 @@ export const crearItem = {
     type: "object",
     properties: {
       nombre: { type: "string", description: "Nombre completo del alumno." },
-      telefono: { type: "string", description: "Teléfono de contacto." },
-      correo: { type: "string", description: "Correo para avisos de tareas." },
+      celular: { type: "string", description: "Celular para recordatorios." },
+      correo: { type: "string", description: "Correo del alumno." },
     },
-    required: ["nombre", "telefono", "correo"],
+    required: ["nombre", "celular", "correo"],
     additionalProperties: false,
   },
-  async execute({ nombre, telefono, correo }) {
+  async execute({ nombre, celular, correo }) {
     const supabase = await createClient()
     const {
       data: { user },
@@ -23,7 +23,7 @@ export const crearItem = {
 
     const { data, error } = await supabase
       .from("core_items")
-      .insert({ user_id: user.id, nombre, telefono, correo: correo.toLowerCase() })
+      .insert({ user_id: user.id, nombre, celular, correo: correo.toLowerCase() })
       .select()
       .single()
     if (error) throw new Error(error.message)

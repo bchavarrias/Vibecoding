@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Menu } from "lucide-react"
 import config from "@/config"
-import Logo from "@/components/Logo"
+import BrandLogo from "@/components/BrandLogo"
 
 export default function Navbar() {
   return (
@@ -25,9 +25,8 @@ export default function Navbar() {
             </ul>
           </div>
 
-          <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
-            <Logo className="size-7" />
-            {config.brand.logoText}
+          <Link href="/" className="flex items-center gap-2">
+            <BrandLogo size="sm" />
           </Link>
         </div>
 

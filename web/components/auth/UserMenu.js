@@ -34,7 +34,7 @@ export default function UserMenu({ user }) {
       >
         <li className="menu-title truncate">{user.email}</li>
         <li>
-          <Link href="/dashboard">{config.dashboard.alumnos.navLabel}</Link>
+          <Link href="/dashboard">{config.dashboard.nav.inicio}</Link>
         </li>
         <li>
           <form action={signOut}>

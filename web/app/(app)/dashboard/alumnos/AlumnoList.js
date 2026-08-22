@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Pencil, Trash2, X, Check } from "lucide-react"
-import { updateAlumno, deleteAlumno } from "./actions"
+import { updateAlumno, deleteAlumno } from "../actions"
 
 export default function AlumnoList({ alumnos, labels }) {
   const [editingId, setEditingId] = useState(null)
@@ -17,11 +17,12 @@ export default function AlumnoList({ alumnos, labels }) {
 
   return (
     <div className="overflow-x-auto rounded-box border border-base-200 bg-base-100">
+      <h2 className="border-b border-base-200 px-4 py-3 text-sm font-semibold">{labels.title}</h2>
       <table className="table">
         <thead>
           <tr>
             <th>{labels.columns.nombre}</th>
-            <th>{labels.columns.telefono}</th>
+            <th>{labels.columns.celular}</th>
             <th>{labels.columns.correo}</th>
             <th className="w-28 text-right">Acciones</th>
           </tr>
@@ -50,12 +51,12 @@ export default function AlumnoList({ alumnos, labels }) {
                       />
                     </label>
                     <label className="form-control flex-1">
-                      <span className="label-text text-xs">{labels.columns.telefono}</span>
+                      <span className="label-text text-xs">{labels.columns.celular}</span>
                       <input
-                        name="telefono"
+                        name="celular"
                         required
                         maxLength={20}
-                        defaultValue={alumno.telefono}
+                        defaultValue={alumno.celular}
                         className="input input-bordered input-sm"
                       />
                     </label>
@@ -71,18 +72,12 @@ export default function AlumnoList({ alumnos, labels }) {
                       />
                     </label>
                     <div className="flex gap-1">
-                      <button
-                        type="submit"
-                        className="btn btn-primary btn-sm btn-square"
-                        title={labels.save}
-                        aria-label={labels.save}
-                      >
+                      <button type="submit" className="btn btn-primary btn-sm btn-square" aria-label={labels.save}>
                         <Check className="size-4" />
                       </button>
                       <button
                         type="button"
                         className="btn btn-ghost btn-sm btn-square"
-                        title={labels.cancel}
                         aria-label={labels.cancel}
                         onClick={() => setEditingId(null)}
                       >
@@ -95,7 +90,7 @@ export default function AlumnoList({ alumnos, labels }) {
             ) : (
               <tr key={alumno.id}>
                 <td className="font-medium">{alumno.nombre}</td>
-                <td>{alumno.telefono}</td>
+                <td>{alumno.celular}</td>
                 <td>
                   <a href={`mailto:${alumno.correo}`} className="link link-primary">
                     {alumno.correo}
@@ -106,7 +101,6 @@ export default function AlumnoList({ alumnos, labels }) {
                     <button
                       type="button"
                       className="btn btn-ghost btn-sm btn-square"
-                      title={labels.edit}
                       aria-label={`${labels.edit} ${alumno.nombre}`}
                       onClick={() => setEditingId(alumno.id)}
                     >
@@ -117,7 +111,6 @@ export default function AlumnoList({ alumnos, labels }) {
                       <button
                         type="submit"
                         className="btn btn-ghost btn-sm btn-square text-error"
-                        title={labels.delete}
                         aria-label={`${labels.delete} ${alumno.nombre}`}
                       >
                         <Trash2 className="size-4" />

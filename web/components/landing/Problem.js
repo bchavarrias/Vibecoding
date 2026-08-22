@@ -10,7 +10,7 @@ export default function Problem() {
   const { eyebrow, title, subtitle, items } = config.landing.problem
 
   return (
-    <section className="border-t border-base-200 bg-base-200/40 py-20 md:py-28">
+    <section id="how" className="border-t border-base-200 bg-base-200/40 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-4">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-primary">{eyebrow}</p>

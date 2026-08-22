@@ -1,309 +1,349 @@
 // ============================================================
 // Vibecoding · config.js
 // ------------------------------------------------------------
-// ESTE ES EL ARCHIVO MÁS IMPORTANTE DEL BOILERPLATE.
-// Todo el branding, copy, features y configuración del producto vive aquí.
-// Cambiar este archivo cambia el producto entero — sin abrir JSX.
-//
-// Estructura:
-//   - app:      identidad del producto (nombre, descripción, dominio, color)
-//   - features: toggles para encender/apagar funcionalidades
-//   - ai:       configuración de OpenAI
-//   - email:    configuración de Resend
-//   - auth:     providers habilitados
-//   - landing:  copy de la página pública
-//   - pricing:  planes (si features.pricing está activo; el cobro real es features.paypal)
-//
-// Tip Sem 1: empieza editando `app` y `landing.hero` con los datos de tu producto.
+// Chavarría's Org — recordatorios de tareas vía Google Classroom
 // ============================================================
 
 const config = {
-  // -----------------------------------------------------------
-  // Identidad del producto
-  // -----------------------------------------------------------
   app: {
-    name: "EntregaAlert",
+    name: "Chavarría's Org",
     description:
-      "Registra tus cursos de Moodle y recibe avisos antes de cada entrega para que nunca se te pase una tarea.",
-    domain: "entregalert.com", // sin https://, sin www
-    locale: "es", // "es" | "en"
-    // URL pública: usa NEXT_PUBLIC_APP_URL en .env. En este config solo definimos el default.
+      "Gestiona recordatorios de tareas pendientes al celular de los alumnos, vinculados con Google Classroom.",
+    domain: "chavarrias-org.com",
+    locale: "es",
     defaultUrl: "http://localhost:3000",
   },
 
-  // -----------------------------------------------------------
-  // Identidad visual
-  // -----------------------------------------------------------
   brand: {
-    // Color primario en HEX. DaisyUI lo aplica como --color-primary via theme.
-    primary: "#6366F1", // indigo — confianza + energía universitaria
-    // Logo: puede ser texto o ruta a /public/logo.svg
-    logoText: "Vibecoding - El futuro de la IA",
+    primary: "#10B981",
+    logoText: "Chavarría's Org",
     logoSrc: null,
-    // Estilo del bordeado global (DaisyUI usa esto para botones, cards)
+    utchLogoSrc: "/utch-logo.svg",
+    tagline: "Recordatorios inteligentes · UTCH",
     radius: "1rem",
   },
 
-  // -----------------------------------------------------------
-  // Toggles de features — encienden/apagan rutas y componentes
-  // -----------------------------------------------------------
-  features: {
-    waitlist: true, // Captura emails en landing — Sem 1
-    googleAuth: true, // Login con Google — Sem 2
-    emailLogin: false, // Magic link email — opcional
-    aiChat: true, // Chat AI en /chat — Sem 3
-    toolUse: true, // Tool use registry — Sem 4
-    agents: true, // LangGraph agents — Sem 5 (opcional-avanzado)
-    resend: true, // Email — Sem 1+
-    pricing: true, // Muestra la sección de precios en la landing (vitrina; el cobro real es `paypal`)
-    paypal: false, // Botón PayPal.me en Pricing (configura `payment` abajo)
-    adminPanel: true, // Panel /admin de leads (waitlist) — requiere ADMIN_PASSWORD en .env.local
+  academico: {
+    cuatrimestresTotal: 10,
+    maxMateriasPorCuatrimestre: 5,
+    periodos: [
+      { id: 1, label: "Ene–Abr", meses: "enero a abril" },
+      { id: 2, label: "May–Ago", meses: "mayo a agosto" },
+      { id: 3, label: "Sep–Dic", meses: "septiembre a diciembre" },
+    ],
   },
 
-  // -----------------------------------------------------------
-  // PayPal.me (si features.paypal está activo)
-  // -----------------------------------------------------------
+  features: {
+    waitlist: true,
+    googleAuth: true,
+    emailLogin: false,
+    aiChat: false,
+    toolUse: false,
+    agents: false,
+    resend: true,
+    pricing: false,
+    paypal: false,
+    adminPanel: true,
+    classroom: true,
+  },
+
   payment: {
-    paypalMeUsername: "", // tu usuario de https://paypal.me (sin @ ni URL)
-    defaultAmount: 0, // 0 = el comprador elige el monto
+    paypalMeUsername: "",
+    defaultAmount: 0,
     currency: "USD",
     buttonText: "Pagar con PayPal",
   },
 
-  // -----------------------------------------------------------
-  // OpenAI
-  // -----------------------------------------------------------
   ai: {
-    chatModel: "gpt-4o-mini", // default barato y rápido
+    chatModel: "gpt-4o-mini",
     structuredModel: "gpt-4o-mini",
-    agentModel: "gpt-4o", // los agentes razonan mejor con full gpt-4o
+    agentModel: "gpt-4o",
     maxTokens: 1500,
     temperature: 0.4,
   },
 
-  // -----------------------------------------------------------
-  // Resend (email transaccional)
-  // -----------------------------------------------------------
   email: {
-    // Asegúrate de tener el dominio verificado en Resend antes de cambiar `from`.
-    // En desarrollo Resend permite enviar a tu propio correo desde `onboarding@resend.dev`.
-    from: "Vibecoding <onboarding@resend.dev>",
-    replyTo: "hola@vibecoding.dev",
-    supportEmail: "soporte@vibecoding.dev",
+    from: "Chavarría's Org <onboarding@resend.dev>",
+    replyTo: "hola@chavarrias-org.com",
+    supportEmail: "soporte@chavarrias-org.com",
   },
 
-  // -----------------------------------------------------------
-  // Auth providers
-  // -----------------------------------------------------------
   auth: {
     loginUrl: "/login",
     afterLoginUrl: "/dashboard",
     afterLogoutUrl: "/",
-    providers: ["google"], // se sincroniza con features.googleAuth / emailLogin
+    providers: ["google"],
   },
 
-  // -----------------------------------------------------------
-  // Dashboard — registro de alumnos (core_items)
-  // -----------------------------------------------------------
   dashboard: {
+    nav: {
+      inicio: "Inicio",
+      alumnos: "Alumnos",
+      materias: "Materias",
+      inscripciones: "Inscripciones",
+      tareas: "Tareas",
+      classroom: "Classroom",
+    },
+    inicio: {
+      pageTitle: "Panel principal",
+      subtitle:
+        "Administra alumnos, materias e inscripciones. Los recordatorios llegan al celular vinculados con Google Classroom.",
+    },
     alumnos: {
       navLabel: "Alumnos",
-      pageTitle: "Mis alumnos",
+      pageTitle: "Registro de alumnos",
       subtitle:
-        "Registra y actualiza los datos de contacto de cada alumno para enviarle avisos de tareas en Moodle.",
+        "Captura nombre, correo y celular para enviar recordatorios de tareas pendientes.",
       form: {
-        title: "Registrar alumno",
+        title: "Nuevo alumno",
         nombre: { label: "Nombre del alumno", placeholder: "Ej. Ana García López" },
-        telefono: { label: "Teléfono", placeholder: "Ej. 6141234567" },
+        celular: { label: "Celular", placeholder: "Ej. 6141234567" },
         correo: { label: "Correo", placeholder: "Ej. ana@uni.edu.mx" },
         submit: "Registrar alumno",
       },
       list: {
         title: "Alumnos registrados",
-        empty: "Aún no hay alumnos registrados. Agrega el primero con el formulario de arriba.",
+        empty: "Aún no hay alumnos. Registra el primero arriba.",
         error: "No pudimos cargar los alumnos",
         columns: {
-          nombre: "Nombre del alumno",
-          telefono: "Teléfono",
+          nombre: "Nombre",
+          celular: "Celular",
           correo: "Correo",
         },
         edit: "Editar",
-        save: "Guardar cambios",
+        save: "Guardar",
         cancel: "Cancelar",
         delete: "Eliminar",
       },
     },
+    materias: {
+      pageTitle: "Materias",
+      subtitle: "Registra las materias de la carrera (10 cuatrimestres · máx. 5 por periodo).",
+      form: {
+        title: "Nueva materia",
+        nombre: { label: "Nombre de la materia", placeholder: "Ej. Programación Web" },
+        codigo: { label: "Código (opcional)", placeholder: "Ej. PW-401" },
+        submit: "Registrar materia",
+      },
+      list: {
+        title: "Materias registradas",
+        empty: "No hay materias registradas.",
+        error: "No pudimos cargar las materias",
+        columns: {
+          nombre: "Materia",
+          codigo: "Código",
+          classroom: "Google Classroom",
+        },
+        edit: "Editar",
+        save: "Guardar",
+        cancel: "Cancelar",
+        delete: "Eliminar",
+        sinClassroom: "Sin vincular",
+      },
+    },
+    inscripciones: {
+      pageTitle: "Inscripciones",
+      subtitle:
+        "Asigna materias a cada alumno por cuatrimestre (máximo 5 materias por cuatrimestre).",
+      form: {
+        title: "Inscribir alumno en materia",
+        alumno: { label: "Alumno" },
+        materia: { label: "Materia" },
+        cuatrimestre: { label: "Cuatrimestre (1–10)" },
+        anio: { label: "Año" },
+        periodo: { label: "Periodo" },
+        submit: "Inscribir",
+      },
+      list: {
+        title: "Inscripciones activas",
+        empty: "No hay inscripciones. Asigna materias a tus alumnos.",
+        error: "No pudimos cargar las inscripciones",
+        maxError: "Este alumno ya tiene 5 materias en ese cuatrimestre.",
+        columns: {
+          alumno: "Alumno",
+          materia: "Materia",
+          cuatrimestre: "Cuatrimestre",
+          periodo: "Periodo",
+        },
+        delete: "Quitar inscripción",
+      },
+    },
+    tareas: {
+      pageTitle: "Tareas y recordatorios",
+      subtitle:
+        "Tareas pendientes vinculadas a Google Classroom. Se envían avisos al celular del alumno.",
+      form: {
+        title: "Nueva tarea",
+        alumno: { label: "Alumno" },
+        materia: { label: "Materia (opcional)" },
+        titulo: { label: "Título de la tarea", placeholder: "Ej. Entrega proyecto final" },
+        descripcion: { label: "Descripción (opcional)", placeholder: "Detalles de la entrega" },
+        fecha: { label: "Fecha límite" },
+        submit: "Agregar tarea",
+      },
+      list: {
+        title: "Tareas pendientes",
+        empty: "No hay tareas registradas. Sincroniza Classroom o agrega una manualmente.",
+        error: "No pudimos cargar las tareas",
+        columns: {
+          titulo: "Tarea",
+          alumno: "Alumno",
+          materia: "Materia",
+          fecha: "Entrega",
+          recordatorio: "Recordatorio",
+        },
+        enviado: "Enviado",
+        pendiente: "Pendiente",
+        delete: "Eliminar",
+        sync: "Sincronizar Classroom",
+      },
+    },
+    classroom: {
+      pageTitle: "Google Classroom",
+      subtitle:
+        "Conecta tu cuenta de Google para importar cursos y tareas automáticamente.",
+      connect: "Conectar Google Classroom",
+      sync: "Sincronizar ahora",
+      connected: "Classroom conectado",
+      disconnected: "Classroom no conectado",
+      syncHint:
+        "Importa cursos activos como materias y tareas con fecha límite como recordatorios al celular de alumnos inscritos.",
+    },
   },
 
-  // -----------------------------------------------------------
-  // Landing — todo el copy de la página pública
-  // -----------------------------------------------------------
   landing: {
     nav: [
       { label: "Características", href: "#features" },
-      { label: "Precios", href: "#pricing" },
+      { label: "Cómo funciona", href: "#how" },
       { label: "Preguntas", href: "#faq" },
-      { label: "Docs", href: "/docs" },
     ],
     hero: {
-      eyebrow: "Para estudiantes universitarios",
-      title: "Nunca más olvides una entrega de Moodle ni una tarea pendiente",
+      eyebrow: "UTCH · Estudiantes universitarios",
+      title: "Tus tareas de Classroom, directo a tu celular",
       subtitle:
-        "Conecta tus cursos y recibe recordatorios automáticos días antes de cada fecha límite.",
-      cta: { label: "Regístrate gratis", href: "#waitlist" },
-      ctaSecondary: { label: "Ver docs", href: "/docs" },
+        "Chavarría's Org te avisa antes de cada entrega para que nunca se te pase una tarea pendiente.",
+      cta: { label: "Empezar gratis", href: "/login" },
+      ctaSecondary: { label: "Ver cómo funciona", href: "#how" },
     },
     problem: {
       eyebrow: "El problema",
-      title: "Tu negocio necesita presencia digital, no un título en sistemas.",
+      title: "Entre clases, trabajos y redes, las fechas límite se pierden.",
       subtitle:
-        "La mayoría de los emprendedores se quedan fuera de lo digital por creer que es caro o complicado.",
+        "Google Classroom tiene las tareas, pero nadie te recuerda a tiempo en el canal que sí revisas: tu celular.",
       items: [
         {
-          icon: "Timer",
-          title: "Meses cotizando",
-          body: "Una página 'profesional' te la cotizan cara y tarda meses. Mientras, tus clientes te buscan y no te encuentran.",
+          icon: "Clock",
+          title: "Entregas de último minuto",
+          body: "Te enteras del examen o proyecto el día anterior — o peor, cuando ya cerró la entrega.",
         },
         {
-          icon: "Puzzle",
-          title: "Herramientas que abruman",
-          body: "Dominio, hosting, base de datos… cada término suena a otro idioma y nadie te lo explica en simple.",
+          icon: "Smartphone",
+          title: "El celular manda",
+          body: "Revisas WhatsApp todo el día, pero Classroom queda enterrado entre correos y notificaciones.",
         },
         {
-          icon: "PlugZap",
-          title: "La IA cambió las reglas",
-          body: "Hoy puedes construirlo tú, describiendo lo que necesitas en español. Solo te falta la base correcta.",
+          icon: "BookOpen",
+          title: "Demasiadas materias",
+          body: "Hasta 5 materias por cuatrimestre, 10 cuatrimestres de carrera — imposible llevarlo en la cabeza.",
         },
       ],
     },
     features: {
-      eyebrow: "Lo que ya viene listo",
-      title: "Todo lo del curso, ya cableado.",
-      subtitle: "Tú te enfocas en tu negocio; la plantilla pone la parte técnica.",
+      eyebrow: "Características",
+      title: "Todo lo que necesitas para no olvidar una entrega.",
+      subtitle: "Diseñado para alumnos de la UTCH y cualquier universidad con Google Classroom.",
       items: [
         {
           icon: "BellRing",
-          title: "Avisos antes de cada entrega",
-          body: "Te notificamos con días de anticipación para que organices tu tiempo sin estrés de último minuto.",
+          title: "Recordatorios al celular",
+          body: "Avisos automáticos días antes de cada fecha límite, al número que registres.",
         },
         {
           icon: "GraduationCap",
-          title: "Conecta tus cursos de Moodle",
-          body: "Registra tus materias una vez y centraliza todas las fechas límite en un solo lugar.",
+          title: "Vinculado con Classroom",
+          body: "Importa cursos y tareas desde Google Classroom sin copiar fechas a mano.",
         },
         {
-          icon: "Mail",
-          title: "Recordatorios directo a tu bandeja",
-          body: "Recibe correos claros con el nombre de la tarea, la materia y cuánto falta para entregar.",
+          icon: "Layers",
+          title: "Materias por cuatrimestre",
+          body: "Organiza hasta 5 materias por cuatrimestre en los 10 cuatrimestres de tu carrera.",
         },
       ],
     },
     faq: {
       eyebrow: "Preguntas frecuentes",
-      title: "Lo que todos preguntan antes de arrancar.",
+      title: "Lo que preguntan antes de registrarse.",
       items: [
         {
-          q: "¿Funciona con el Moodle de mi universidad?",
-          a: "Sí, si tu escuela usa Moodle estándar. Solo necesitas tu cuenta de alumno para sincronizar tus cursos.",
+          q: "¿Cuántas materias puedo registrar por cuatrimestre?",
+          a: "Máximo 5 materias por cuatrimestre, alineado con la carga académica típica de la carrera.",
         },
         {
-          q: "¿Tengo que compartir mi contraseña de Moodle?",
-          a: "No guardamos tu contraseña. Solo leemos las fechas de entrega de los cursos que tú autorizas.",
+          q: "¿Cómo se vincula con Google Classroom?",
+          a: "Conectas tu cuenta de Google y sincronizamos los cursos y tareas. Los recordatorios se programan al celular del alumno.",
         },
         {
-          q: "¿Cuánto cuesta usar EntregaAlert?",
-          a: "Puedes registrarte gratis y recibir avisos básicos por correo. Los planes de pago desbloquean más materias y recordatorios personalizados.",
+          q: "¿Cuánto dura un cuatrimestre?",
+          a: "4 meses: enero–abril (1°), mayo–agosto (2°) o septiembre–diciembre (3°). La carrera completa son 10 cuatrimestres.",
         },
         {
-          q: "¿Con cuánta anticipación me avisan?",
-          a: "Por defecto te escribimos 3 y 1 día antes de cada entrega, y puedes ajustar los plazos desde tu panel.",
+          q: "¿Es gratis?",
+          a: "Sí, puedes registrar alumnos, materias e inscripciones sin costo. Los recordatorios al celular están incluidos.",
         },
       ],
     },
     finalCta: {
-      eyebrow: "Tu turno",
-      title: "Deja de posponerlo. Publica tu negocio.",
-      subtitle:
-        "Edita config.js con los datos de tu negocio, describe lo que quieres y ten tu página en línea esta misma semana.",
-      cta: { label: "Apúntate a la lista", href: "#waitlist" },
-      ctaSecondary: { label: "Leer las docs", href: "/docs" },
+      eyebrow: "Empieza hoy",
+      title: "Organiza tu cuatrimestre sin estrés.",
+      subtitle: "Regístrate con Google, agrega tus materias y deja que los recordatorios trabajen por ti.",
+      cta: { label: "Entrar con Google", href: "/login" },
+      ctaSecondary: { label: "Unirme a la lista", href: "#waitlist" },
     },
     waitlist: {
-      eyebrow: "Únete primero",
-      title: "Sé de los primeros en saber.",
-      subtitle: "Déjanos tu correo y te avisamos cuando esto arranque.",
-      successMessage: "¡Listo! Te avisamos en cuanto haya novedades.",
-      buttonLabel: "Quiero entrar",
+      eyebrow: "Lista de espera",
+      title: "Sé de los primeros en probarlo.",
+      subtitle: "Déjanos tu correo y te avisamos cuando abramos nuevas plazas.",
+      successMessage: "¡Listo! Te contactamos pronto.",
+      buttonLabel: "Quiero acceso",
       placeholder: "tu@email.com",
     },
     footer: {
-      tagline:
-        "Hecho por Pedro Gutiérrez (Roni) para el curso Vibe Code · Change and Code × Startup Chihuahua.",
+      tagline: "Chavarría's Org · Recordatorios académicos en alianza con la UTCH.",
       columns: [
         {
           title: "Producto",
           links: [
             { label: "Características", href: "#features" },
-            { label: "Precios", href: "#pricing" },
+            { label: "Cómo funciona", href: "#how" },
             { label: "Preguntas", href: "#faq" },
           ],
         },
         {
-          title: "Recursos",
+          title: "Plataforma",
           links: [
-            { label: "Docs", href: "/docs" },
-            { label: "Quick start", href: "/docs/setup/quick-start" },
-            { label: "Troubleshooting", href: "/docs/troubleshooting/errores-comunes" },
+            { label: "Entrar", href: "/login" },
+            { label: "Panel", href: "/dashboard" },
           ],
         },
         {
-          title: "Comunidad",
+          title: "Universidad",
           links: [
-            { label: "GitHub", href: "https://github.com/RoniHY/Vibecoding", external: true },
-            { label: "Change and Code", href: "https://changeandcode.com", external: true },
+            { label: "UTCH", href: "https://utch.edu.mx", external: true },
           ],
         },
       ],
-      // Compat: links planos usados en el bar inferior
       links: [
-        { label: "Docs", href: "/docs" },
-        { label: "GitHub", href: "https://github.com/RoniHY/Vibecoding", external: true },
+        { label: "Entrar", href: "/login" },
+        { label: "UTCH", href: "https://utch.edu.mx", external: true },
       ],
     },
   },
 
-  // -----------------------------------------------------------
-  // Pricing — vitrina de planes.
-  // Se muestra en la landing si features.pricing === true.
-  // El cobro real (PayPal.me) depende de features.paypal.
-  // -----------------------------------------------------------
   pricing: {
     eyebrow: "Precios",
-    title: "Simple y sin sorpresas.",
-    subtitle: "Empieza gratis. Sube de plan cuando tu producto crezca.",
-    plans: [
-      {
-        id: "starter",
-        name: "Starter",
-        price: 0,
-        currency: "USD",
-        interval: "mes",
-        description: "Para probar el producto.",
-        features: ["Hasta 100 usuarios", "Soporte por email", "Branding Vibecoding"],
-        cta: "Empezar gratis",
-      },
-      {
-        id: "pro",
-        name: "Pro",
-        price: 29,
-        currency: "USD",
-        interval: "mes",
-        description: "Para founders que ya facturan.",
-        features: ["Usuarios ilimitados", "Soporte prioritario", "Sin branding"],
-        cta: "Probar Pro",
-        highlighted: true,
-      },
-    ],
+    title: "Gratis para estudiantes.",
+    subtitle: "Sin planes de pago por ahora.",
+    plans: [],
   },
 }
 

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import config from "@/config"
 import { getUser } from "@/lib/supabase/server"
 import GoogleButton from "@/components/auth/GoogleButton"
-import Logo from "@/components/Logo"
+import BrandLogo from "@/components/BrandLogo"
 
 export const metadata = { title: "Entrar" }
 
@@ -19,9 +19,8 @@ export default async function LoginPage({ searchParams }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-base-200 px-4">
       <div className="w-full max-w-sm rounded-2xl border border-base-200 bg-base-100 p-8 shadow-sm">
-        <Link href="/" className="flex items-center gap-2 text-lg font-bold">
-          <Logo className="size-7" />
-          {config.brand.logoText}
+        <Link href="/">
+          <BrandLogo size="md" showTagline />
         </Link>
 
         <h1 className="mt-6 text-2xl font-bold tracking-tight">Entra a tu cuenta</h1>

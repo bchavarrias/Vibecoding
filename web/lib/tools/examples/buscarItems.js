@@ -28,7 +28,7 @@ export const buscarItems = {
     if (!term) return { ok: true, alumnos: [] }
 
     const pattern = `%${escapeIlike(term)}%`
-    const select = "id, nombre, telefono, correo"
+    const select = "id, nombre, celular, correo"
 
     // Dos consultas .ilike() en lugar de .or() con string crudo: PostgREST
     // interpreta comas en el valor como separadores de filtros (ej. "García, Ana").
