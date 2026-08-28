@@ -1,10 +1,7 @@
 import config from "@/config"
 import { createClient } from "@/lib/supabase/server"
-import {
-  createTarea,
-  deleteTarea,
-  marcarRecordatorioEnviado,
-} from "../actions"
+import { deleteTarea, marcarRecordatorioEnviado } from "../actions"
+import TareaForm from "./TareaForm"
 
 const labels = config.dashboard.tareas
 const dateFmt = new Intl.DateTimeFormat("es-MX", {
@@ -26,9 +23,14 @@ export default async function TareasPage() {
       supabase.from("materias").select("id, nombre").order("nombre"),
       supabase
         .from("tareas")
-        .select("id, titulo, fecha_entrega, recordatorio_enviado, classroom_coursework_id, alumno:core_items(nombre, celular), materia:materias(nombre)")
+        .select(
+          "id, titulo, fecha_entrega, recordatorio_enviado, classroom_coursework_id, alumno:core_items(nombre, celular), materia:materias(nombre)"
+        )
         .order("fecha_entrega", { ascending: true }),
     ])
+
+  const iaEnabled =
+    config.features.structuredTareas && Boolean(process.env.OPENAI_API_KEY)
 
   return (
     <div className="space-y-6">
@@ -37,44 +39,17 @@ export default async function TareasPage() {
         <p className="mt-1 text-sm text-base-content/70">{labels.subtitle}</p>
       </div>
 
-      <form action={createTarea} className="rounded-box border border-base-200 bg-base-100 p-4">
-        <h2 className="mb-4 text-sm font-semibold">{labels.form.title}</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="form-control">
-            <span className="label-text mb-1">{labels.form.alumno.label}</span>
-            <select name="alumno_id" required className="select select-bordered" defaultValue="">
-              <option value="" disabled>Selecciona alumno</option>
-              {(alumnos ?? []).map((a) => (
-                <option key={a.id} value={a.id}>{a.nombre}</option>
-              ))}
-            </select>
-          </label>
-          <label className="form-control">
-            <span className="label-text mb-1">{labels.form.materia.label}</span>
-            <select name="materia_id" className="select select-bordered" defaultValue="">
-              <option value="">Sin materia</option>
-              {(materias ?? []).map((m) => (
-                <option key={m.id} value={m.id}>{m.nombre}</option>
-              ))}
-            </select>
-          </label>
-          <label className="form-control sm:col-span-2">
-            <span className="label-text mb-1">{labels.form.titulo.label}</span>
-            <input name="titulo" required placeholder={labels.form.titulo.placeholder} className="input input-bordered" />
-          </label>
-          <label className="form-control sm:col-span-2">
-            <span className="label-text mb-1">{labels.form.descripcion.label}</span>
-            <input name="descripcion" placeholder={labels.form.descripcion.placeholder} className="input input-bordered" />
-          </label>
-          <label className="form-control">
-            <span className="label-text mb-1">{labels.form.fecha.label}</span>
-            <input name="fecha_entrega" type="datetime-local" required className="input input-bordered" />
-          </label>
-          <div className="flex items-end">
-            <button type="submit" className="btn btn-primary w-full">{labels.form.submit}</button>
-          </div>
-        </div>
-      </form>
+      <TareaForm
+        alumnos={alumnos ?? []}
+        materias={materias ?? []}
+        labels={labels.form}
+        iaLabels={config.dashboard.tareas.parseAviso}
+        iaEnabled={iaEnabled}
+      />
+
+      {config.features.structuredTareas && !process.env.OPENAI_API_KEY && (
+        <p className="text-sm text-base-content/60">{config.dashboard.tareas.parseAviso.noKey}</p>
+      )}
 
       {error && (
         <div className="rounded-lg border border-error/40 bg-error/10 px-4 py-3 text-sm text-error">
@@ -88,7 +63,9 @@ export default async function TareasPage() {
         </div>
       ) : (
         <div className="overflow-x-auto rounded-box border border-base-200 bg-base-100">
-          <h2 className="border-b border-base-200 px-4 py-3 text-sm font-semibold">{labels.list.title}</h2>
+          <h2 className="border-b border-base-200 px-4 py-3 text-sm font-semibold">
+            {labels.list.title}
+          </h2>
           <table className="table">
             <thead>
               <tr>
@@ -111,9 +88,13 @@ export default async function TareasPage() {
                   </td>
                   <td>{t.alumno?.nombre}</td>
                   <td>{t.materia?.nombre || "—"}</td>
-                  <td className="whitespace-nowrap text-sm">{dateFmt.format(new Date(t.fecha_entrega))}</td>
+                  <td className="whitespace-nowrap text-sm">
+                    {dateFmt.format(new Date(t.fecha_entrega))}
+                  </td>
                   <td>
-                    <span className={`badge badge-sm ${t.recordatorio_enviado ? "badge-success" : "badge-warning"}`}>
+                    <span
+                      className={`badge badge-sm ${t.recordatorio_enviado ? "badge-success" : "badge-warning"}`}
+                    >
                       {t.recordatorio_enviado ? labels.list.enviado : labels.list.pendiente}
                     </span>
                   </td>
@@ -122,12 +103,16 @@ export default async function TareasPage() {
                       {!t.recordatorio_enviado && (
                         <form action={marcarRecordatorioEnviado}>
                           <input type="hidden" name="id" value={t.id} />
-                          <button type="submit" className="btn btn-ghost btn-xs">Enviar</button>
+                          <button type="submit" className="btn btn-ghost btn-xs">
+                            Enviar
+                          </button>
                         </form>
                       )}
                       <form action={deleteTarea}>
                         <input type="hidden" name="id" value={t.id} />
-                        <button type="submit" className="btn btn-ghost btn-xs text-error">{labels.list.delete}</button>
+                        <button type="submit" className="btn btn-ghost btn-xs text-error">
+                          {labels.list.delete}
+                        </button>
                       </form>
                     </div>
                   </td>

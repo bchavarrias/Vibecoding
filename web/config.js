@@ -45,6 +45,7 @@ const config = {
     paypal: false,
     adminPanel: true,
     classroom: true,
+    structuredTareas: true,
   },
 
   payment: {
@@ -196,6 +197,16 @@ const config = {
         pendiente: "Pendiente",
         delete: "Eliminar",
         sync: "Sincronizar Classroom",
+      },
+      parseAviso: {
+        title: "Pegar aviso de Classroom",
+        placeholder:
+          "Copia aquí el aviso de Classroom, correo del profesor o mensaje del grupo…",
+        button: "Extraer con IA",
+        loading: "Analizando aviso…",
+        success: "Campos listos — revisa y guarda.",
+        error: "No pudimos leer el aviso.",
+        noKey: "Agrega OPENAI_API_KEY en .env.local para usar la extracción con IA.",
       },
     },
     classroom: {
