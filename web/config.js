@@ -2,6 +2,7 @@
 // Vibecoding · config.js
 // ------------------------------------------------------------
 // Chavarría's Org — recordatorios de tareas vía Google Classroom
+// Publicación producción: 2026-09-10
 // ============================================================
 
 const config = {
