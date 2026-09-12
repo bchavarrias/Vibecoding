@@ -16,6 +16,10 @@ export default function BrandLogo({ className = "", showTagline = false, size = 
         <img
           src={config.brand.utchLogoSrc}
           alt="Universidad Tecnológica de Chihuahua"
+          width={36}
+          height={36}
+          decoding="async"
+          loading="lazy"
           className={`${s.utch} shrink-0 rounded-full object-contain`}
         />
       )}

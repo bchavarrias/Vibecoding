@@ -34,10 +34,16 @@ export default function Waitlist() {
   }
 
   return (
-    <section id="waitlist" className="border-t border-base-200 bg-base-100 py-20 md:py-28">
+    <section
+      id="waitlist"
+      className="border-t border-base-200 bg-base-100 py-16 md:py-28"
+      aria-labelledby="waitlist-heading"
+    >
       <div className="mx-auto max-w-2xl px-4 text-center">
         <p className="text-sm font-medium uppercase tracking-wider text-primary">{eyebrow}</p>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
+        <h2 id="waitlist-heading" className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+          {title}
+        </h2>
         <p className="mt-4 text-base-content/70">{subtitle}</p>
 
         {status === "success" ? (
@@ -69,7 +75,7 @@ export default function Waitlist() {
             />
             <button
               type="submit"
-              className="btn btn-accent"
+              className="btn btn-accent btn-interactive"
               disabled={status === "loading"}
             >
               {status === "loading" && <span className="loading loading-spinner loading-sm" />}

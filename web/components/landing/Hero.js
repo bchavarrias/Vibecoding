@@ -12,7 +12,7 @@ export default function Hero() {
   const { eyebrow, title, subtitle, cta, ctaSecondary } = config.landing.hero
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden" aria-labelledby="hero-title">
       {/* Fondo: cuadrícula + glows de marca */}
       <div
         className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(75%_60%_at_50%_0%,#000,transparent)]"
@@ -31,19 +31,21 @@ export default function Hero() {
           </div>
         )}
 
-        <h1 className="text-balance text-4xl font-bold tracking-tight md:text-6xl">{title}</h1>
+        <h1 id="hero-title" className="text-balance text-4xl font-bold tracking-tight md:text-6xl">
+          {title}
+        </h1>
 
         <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-relaxed text-base-content/70 md:text-xl">
           {subtitle}
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Link href={cta.href} className="btn btn-accent btn-lg">
+          <Link href={cta.href} className="btn btn-accent btn-lg btn-interactive">
             {cta.label}
-            <ArrowRight className="size-4" />
+            <ArrowRight className="size-4" aria-hidden />
           </Link>
           {ctaSecondary && (
-            <Link href={ctaSecondary.href} className="btn btn-ghost btn-lg">
+            <Link href={ctaSecondary.href} className="btn btn-ghost btn-lg btn-interactive">
               {ctaSecondary.label}
             </Link>
           )}

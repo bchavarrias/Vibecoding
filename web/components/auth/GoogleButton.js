@@ -26,7 +26,7 @@ export default function GoogleButton({ next = "/dashboard" }) {
       onClick={signIn}
       disabled={loading}
       aria-busy={loading}
-      className="btn btn-outline w-full gap-3"
+      className="btn btn-outline btn-interactive w-full gap-3"
     >
       {loading ? (
         <span className="loading loading-spinner loading-sm" />

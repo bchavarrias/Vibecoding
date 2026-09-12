@@ -31,6 +31,11 @@ export const metadata = {
     description: config.app.description,
     type: "website",
     locale: config.app.locale === "es" ? "es_MX" : "en_US",
+    siteName: config.app.name,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   twitter: { card: "summary_large_image" },
   icons: { icon: "/favicon.svg" },

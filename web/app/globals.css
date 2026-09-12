@@ -199,3 +199,64 @@ h4,
 .prose-vf hr {
   @apply my-8 border-base-300;
 }
+
+/* Enlace “saltar al contenido” (visible solo al enfocar con teclado) */
+.skip-to-content {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  border-radius: var(--radius-field, 0.5rem);
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-interactive {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .btn-interactive:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .btn-interactive:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .card-interactive {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .card-interactive:hover {
+    box-shadow: 0 8px 24px color-mix(in oklch, var(--color-base-content) 8%, transparent);
+  }
+}

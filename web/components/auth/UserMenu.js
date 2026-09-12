@@ -12,11 +12,20 @@ export default function UserMenu({ user }) {
 
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn btn-ghost btn-sm gap-2">
+      <div
+        tabIndex={0}
+        role="button"
+        className="btn btn-ghost btn-sm gap-2 btn-interactive"
+        aria-label={`Menú de cuenta: ${name}`}
+      >
         {avatar ? (
           <img
             src={avatar}
-            alt={name}
+            alt=""
+            width={28}
+            height={28}
+            loading="lazy"
+            decoding="async"
             referrerPolicy="no-referrer"
             className="size-7 rounded-full"
           />

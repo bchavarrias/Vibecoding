@@ -19,7 +19,7 @@ export default function Footer() {
   const { tagline, columns = [] } = config.landing.footer
 
   return (
-    <footer className="border-t border-base-200 bg-base-100">
+    <footer className="border-t border-base-200 bg-base-100" aria-label="Pie de página">
       <div className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-10 md:grid-cols-[1.5fr_repeat(3,1fr)]">
           <div>

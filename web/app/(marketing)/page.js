@@ -7,6 +7,11 @@ import FinalCta from "@/components/landing/FinalCta"
 import Waitlist from "@/components/landing/Waitlist"
 import config from "@/config"
 
+export const metadata = {
+  title: config.landing.hero.title,
+  description: config.landing.hero.subtitle,
+}
+
 export default function HomePage() {
   return (
     <>
