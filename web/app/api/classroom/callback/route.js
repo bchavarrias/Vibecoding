@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
-import config from "@/config"
 import {
   exchangeClassroomCode,
-  getClassroomRedirectUri,
+  getRequestOrigin,
   tokenExpiresAt,
 } from "@/lib/classroom/oauth"
 
-function appUrl(path = "") {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+function appUrl(request, path = "") {
+  const base = getRequestOrigin(request)
   return `${base.replace(/\/$/, "")}${path}`
 }
 
@@ -21,7 +20,7 @@ export async function GET(request) {
   const oauthError = searchParams.get("error")
 
   if (oauthError) {
-    return NextResponse.redirect(appUrl(`/dashboard/classroom?error=${oauthError}`))
+    return NextResponse.redirect(appUrl(request, `/dashboard/classroom?error=${oauthError}`))
   }
 
   const cookieStore = await cookies()
@@ -29,7 +28,7 @@ export async function GET(request) {
   cookieStore.delete("classroom_oauth_state")
 
   if (!code || !state || state !== savedState) {
-    return NextResponse.redirect(appUrl("/dashboard/classroom?error=invalid_state"))
+    return NextResponse.redirect(appUrl(request, "/dashboard/classroom?error=invalid_state"))
   }
 
   const supabase = await createClient()
@@ -37,11 +36,11 @@ export async function GET(request) {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.redirect(appUrl("/login"))
+    return NextResponse.redirect(appUrl(request, "/login"))
   }
 
   try {
-    const tokens = await exchangeClassroomCode(code)
+    const tokens = await exchangeClassroomCode(code, request)
 
     await supabase.from("classroom_connections").upsert(
       {
@@ -54,9 +53,9 @@ export async function GET(request) {
       { onConflict: "user_id" }
     )
 
-    return NextResponse.redirect(appUrl("/dashboard/classroom?connected=1"))
+    return NextResponse.redirect(appUrl(request, "/dashboard/classroom?connected=1"))
   } catch (err) {
     console.error("[classroom/callback]", err.message)
-    return NextResponse.redirect(appUrl("/dashboard/classroom?error=token_exchange"))
+    return NextResponse.redirect(appUrl(request, "/dashboard/classroom?error=token_exchange"))
   }
 }

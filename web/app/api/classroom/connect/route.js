@@ -4,18 +4,19 @@ import { createClient } from "@/lib/supabase/server"
 import config from "@/config"
 import {
   buildClassroomAuthUrl,
+  getRequestOrigin,
   hasClassroomOAuthConfig,
 } from "@/lib/classroom/oauth"
 
 // Inicia OAuth de Google Classroom (scopes adicionales al login de Supabase).
-export async function GET() {
+export async function GET(request) {
   if (!config.features.classroom) {
     return NextResponse.json({ error: "Classroom desactivado." }, { status: 403 })
   }
 
   if (!hasClassroomOAuthConfig()) {
     return NextResponse.redirect(
-      new URL("/dashboard/classroom?error=oauth_config", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
+      new URL("/dashboard/classroom?error=oauth_config", getRequestOrigin(request))
     )
   }
 
@@ -24,7 +25,7 @@ export async function GET() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.redirect(new URL("/login", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"))
+    return NextResponse.redirect(new URL("/login", getRequestOrigin(request)))
   }
 
   const state = crypto.randomUUID()
@@ -37,5 +38,5 @@ export async function GET() {
     path: "/",
   })
 
-  return NextResponse.redirect(buildClassroomAuthUrl(state))
+  return NextResponse.redirect(buildClassroomAuthUrl(state, request))
 }

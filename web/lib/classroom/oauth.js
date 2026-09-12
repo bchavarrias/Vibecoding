@@ -11,8 +11,23 @@ export const CLASSROOM_SCOPES = [
   "https://www.googleapis.com/auth/classroom.rosters.readonly",
 ].join(" ")
 
-export function getClassroomRedirectUri() {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+export function getRequestOrigin(request) {
+  if (request?.headers) {
+    const host = (request.headers.get("x-forwarded-host") || request.headers.get("host") || "")
+      .split(",")[0]
+      .trim()
+    if (host) {
+      const proto =
+        request.headers.get("x-forwarded-proto") ||
+        (String(request.url || "").startsWith("https") ? "https" : "http")
+      return `${proto}://${host}`
+    }
+  }
+  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+}
+
+export function getClassroomRedirectUri(request) {
+  const base = getRequestOrigin(request)
   return `${base.replace(/\/$/, "")}/api/classroom/callback`
 }
 
@@ -22,10 +37,10 @@ export function hasClassroomOAuthConfig() {
   )
 }
 
-export function buildClassroomAuthUrl(state) {
+export function buildClassroomAuthUrl(state, request) {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
-    redirect_uri: getClassroomRedirectUri(),
+    redirect_uri: getClassroomRedirectUri(request),
     response_type: "code",
     scope: CLASSROOM_SCOPES,
     access_type: "offline",
@@ -35,7 +50,7 @@ export function buildClassroomAuthUrl(state) {
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`
 }
 
-export async function exchangeClassroomCode(code) {
+export async function exchangeClassroomCode(code, request) {
   const res = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -43,7 +58,7 @@ export async function exchangeClassroomCode(code) {
       code,
       client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
       client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-      redirect_uri: getClassroomRedirectUri(),
+      redirect_uri: getClassroomRedirectUri(request),
       grant_type: "authorization_code",
     }),
   })

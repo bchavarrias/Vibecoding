@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { headers } from "next/headers"
 import config from "@/config"
 import { createClient } from "@/lib/supabase/server"
 import { hasClassroomOAuthConfig, getClassroomRedirectUri } from "@/lib/classroom/oauth"
@@ -18,7 +19,8 @@ export default async function ClassroomPage({ searchParams }) {
 
   const hasOAuth = hasClassroomOAuthConfig()
   const isConnected = Boolean(connection?.refresh_token)
-  const redirectUri = getClassroomRedirectUri()
+  const headerStore = await headers()
+  const redirectUri = getClassroomRedirectUri({ headers: headerStore, url: "" })
 
   let banner = null
   if (params?.connected === "1") {
@@ -79,10 +81,13 @@ export default async function ClassroomPage({ searchParams }) {
         )}
 
         {hasOAuth && (
-          <p className="mt-4 text-xs text-base-content/50">
-            Redirect URI en Google Cloud:{" "}
-            <code className="rounded bg-base-200 px-1">{redirectUri}</code>
-          </p>
+          <div className="mt-4 rounded-lg border border-warning/40 bg-warning/10 px-4 py-3 text-sm">
+            <p className="font-semibold">Si Google muestra Error 400: redirect_uri_mismatch</p>
+            <p className="mt-1 text-base-content/70">
+              En Google Cloud → Credenciales → tu cliente OAuth (Web) → Authorized redirect URIs, agrega exactamente:
+            </p>
+            <code className="mt-2 block break-all rounded bg-base-200 px-2 py-1 text-xs">{redirectUri}</code>
+          </div>
         )}
 
         <div className="mt-6 flex flex-wrap gap-3">
