@@ -168,14 +168,3 @@ export async function deleteTarea(formData) {
   refreshDashboard()
 }
 
-export async function marcarRecordatorioEnviado(formData) {
-  const id = formData.get("id")?.toString()
-  if (!id) return
-  const { supabase, user } = await requireUser()
-  await supabase
-    .from("tareas")
-    .update({ recordatorio_enviado: true, recordatorio_celular_at: new Date().toISOString() })
-    .eq("id", id)
-    .eq("user_id", user.id)
-  refreshDashboard()
-}

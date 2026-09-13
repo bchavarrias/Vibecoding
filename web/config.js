@@ -47,6 +47,13 @@ const config = {
     adminPanel: true,
     classroom: true,
     structuredTareas: true,
+    smsRecordatorios: true,
+  },
+
+  sms: {
+    sinMateria: "General",
+    recordatorioTemplate:
+      "{app}: Hola {alumno}, tienes pendiente «{titulo}» ({materia}). Fecha límite: {fecha}.",
   },
 
   payment: {
@@ -196,6 +203,18 @@ const config = {
         },
         enviado: "Enviado",
         pendiente: "Pendiente",
+        sendCelular: "Enviar SMS",
+        smsSending: "Enviando…",
+        smsOk: "SMS enviado al celular.",
+        smsError: "No pudimos enviar el SMS.",
+        smsNotConfigured:
+          "Sin Twilio: al pulsar Enviar SMS se abrirá WhatsApp con el mensaje listo. Para SMS automático agrega TWILIO_* en .env.local / Vercel.",
+        smsWhatsAppFallback:
+          "Twilio no configurado — abrimos WhatsApp con el mensaje. Envíalo y luego marca como enviado.",
+        smsWhatsAppHint: "Puedes usar el enlace de WhatsApp del alumno.",
+        smsInvalidPhone: "Revisa el celular del alumno (10 dígitos, México).",
+        smsNoPhone: "El alumno no tiene celular registrado.",
+        smsMarkManual: "Marcar como enviado",
         delete: "Eliminar",
         sync: "Sincronizar Classroom",
       },

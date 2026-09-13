@@ -1,7 +1,8 @@
 import config from "@/config"
 import { createClient } from "@/lib/supabase/server"
-import { deleteTarea, marcarRecordatorioEnviado } from "../actions"
+import { deleteTarea } from "../actions"
 import TareaForm from "./TareaForm"
+import EnviarRecordatorioButton from "./EnviarRecordatorioButton"
 
 const labels = config.dashboard.tareas
 const dateFmt = new Intl.DateTimeFormat("es-MX", {
@@ -32,6 +33,12 @@ export default async function TareasPage() {
   const iaEnabled =
     config.features.structuredTareas && Boolean(process.env.OPENAI_API_KEY)
 
+  const smsConfigured = Boolean(
+    process.env.TWILIO_ACCOUNT_SID &&
+      process.env.TWILIO_AUTH_TOKEN &&
+      process.env.TWILIO_SMS_FROM
+  )
+
   return (
     <div className="space-y-6">
       <div>
@@ -49,6 +56,10 @@ export default async function TareasPage() {
 
       {config.features.structuredTareas && !process.env.OPENAI_API_KEY && (
         <p className="text-sm text-base-content/60">{config.dashboard.tareas.parseAviso.noKey}</p>
+      )}
+
+      {config.features.smsRecordatorios && !smsConfigured && (
+        <p className="text-sm text-base-content/60">{labels.list.smsNotConfigured}</p>
       )}
 
       {error && (
@@ -100,13 +111,8 @@ export default async function TareasPage() {
                   </td>
                   <td className="text-right">
                     <div className="flex justify-end gap-1">
-                      {!t.recordatorio_enviado && (
-                        <form action={marcarRecordatorioEnviado}>
-                          <input type="hidden" name="id" value={t.id} />
-                          <button type="submit" className="btn btn-ghost btn-xs">
-                            Enviar
-                          </button>
-                        </form>
+                      {!t.recordatorio_enviado && config.features.smsRecordatorios && (
+                        <EnviarRecordatorioButton tareaId={t.id} labels={labels.list} />
                       )}
                       <form action={deleteTarea}>
                         <input type="hidden" name="id" value={t.id} />
